@@ -1,0 +1,92 @@
+<p-toast></p-toast>
+
+<div class="card-container">
+  <p-card header="Users">
+
+    <p-toolbar styleClass="p-mb-4">
+      <ng-template pTemplate="left">
+        <button pButton pRipple label="New User" icon="pi pi-plus" class="p-button-info p-mr-2" (click)="addUser()"></button>
+        <button pButton pRipple icon="pi pi-pencil" class="p-button-secondary p-mr-2" [disabled]="!selectedUser" (click)="editUser()"></button>
+        <button pButton pRipple icon="pi pi-trash" class="p-button-danger" [disabled]="!selectedUser" (click)="deleteUser()"></button>
+      </ng-template>
+      <ng-template pTemplate="right">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target, 'contains')" placeholder="Search..." />
+        </span>
+      </ng-template>
+    </p-toolbar>
+
+    <p-table #dt [value]="usersTable" [rows]="10" [paginator]="true" selectionMode="single" [autoLayout]="true" [(selection)]="selectedUser" dataKey="uid" [globalFilterFields]="['firstname','surname','email','city']" currentPageReportTemplate="User {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="firstname">Name<p-sortIcon field="firstname"></p-sortIcon>
+          </th>
+          <th pSortableColumn="email">email<p-sortIcon field="email"></p-sortIcon>
+          </th>
+          <th>Phone</th>
+          <th pSortableColumn="city">City<p-sortIcon field="city"></p-sortIcon>
+          <th pSortableColumn="lastLogged">Last Log<p-sortIcon field="lastLogged"></p-sortIcon>
+          </th>
+          <th pSortableColumn="isAdmin">Admin<p-sortIcon field="isAdmin"></p-sortIcon>
+          </th>
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+        <tr [pSelectableRow]="user">
+          <td>{{user.firstname}} {{user.surname}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.phone}}</td>
+          <td>{{user.city}}</td>
+          <td>{{user.lastLogged?.toLocaleDateString()}}</td>
+          <td>
+            <span [class]="'p-tag p-tag-secondary role-'+roles(user.isAdmin)">{{roles(user.isAdmin)}}</span>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          There are {{usersTable ? usersTable.length : 0 }} users in the database.
+        </div>
+      </ng-template>
+    </p-table>
+
+    <p-dialog [(visible)]="showDialog" [style]="{width: '650px'}" header="User Details" [modal]="true" styleClass="p-fluid edit-dialog">
+      <ng-template pTemplate="content">
+        <div class="p-field">
+          <label for="firstname-input">Firstname</label>
+          <input type="text" pInputText id="firstname-input" [(ngModel)]="dialogUser.firstname" required autofocus />
+          <small class="p-invalid" *ngIf="submitted && !dialogUser.firstname">Firstame is required.</small>
+        </div>
+        <div class="p-field">
+          <label for="surname-input">Surname</label>
+          <input id="surname-input" pInputText [(ngModel)]="dialogUser.surname" required />
+          <small class="p-invalid" *ngIf="submitted && !dialogUser.surname">Surname is required.</small>
+        </div>
+        <div class="p-field">
+          <label for="email-input">Email</label>
+          <input id="email-input" pInputText [(ngModel)]="dialogUser.email" required />
+          <small class="p-invalid" *ngIf="submitted && !dialogUser.email">email is required.</small>
+        </div>
+        <div class="p-field">
+          <label for="phone-input">Phone</label>
+          <p-inputMask mask="(999) 999-9999" [(ngModel)]="dialogUser.phone"></p-inputMask>
+        </div>
+        <div class="p-field">
+          <label for="city-input">City</label>
+          <input id="city-input" pInputText [(ngModel)]="dialogUser.city" />
+        </div>
+        <div class="p-field">
+          <label for="admin-input">Admin</label>
+          <p-inputSwitch [(ngModel)]="dialogUser.isAdmin"></p-inputSwitch>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveUser()"></button>
+      </ng-template>
+    </p-dialog>
+  </p-card>
+  <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+</div>

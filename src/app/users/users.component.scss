@@ -1,0 +1,53 @@
+.card-container {
+  padding: 1em 3em;
+  th {
+    font-size: 1em;
+  }
+  td {
+    font-size: 0.9em;
+  }
+}
+
+.actions-bar {
+  display: flex;
+  justify-content: space-between;
+  button {
+    margin-left: 0.5em;
+  }
+}
+
+:host ::ng-deep {
+  .p-dialog {
+    width: 35em !important;
+  }
+  .p-paginator {
+    .p-paginator-current {
+      margin-left: auto;
+    }
+  }
+  .p-input-icon-left {
+    display: inline-block;
+    input {
+      padding-left: 2em;
+      font-size: 0.9em;
+    }
+  }
+}
+
+.p-field {
+  input {
+    width: 100%;
+  }
+  label {
+    display: block;
+  }
+}
+.p-tag {
+  text-transform: uppercase;
+  line-height: 1;
+  width: 5em;
+  background-color: #929eb3;
+}
+.role-admin {
+  background-color: #868cf0;
+}
